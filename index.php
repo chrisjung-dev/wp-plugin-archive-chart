@@ -19,6 +19,7 @@ function display_archive_chart( $atts ) {
 	extract(shortcode_atts(array(
 		'name' => 'Posting-H&auml;ufigkeit',
 		'width' => '600',
+		'height' => '120',
 		'count' => '12',
 	), $atts));
 
@@ -54,7 +55,7 @@ function display_archive_chart( $atts ) {
 	
 	$chart_code =  '<img '.
 	'width="' . esc_attr( $width ) . '" '
-	. 'height="107" '
+	. 'height="'.$height.'" '
 	. 'alt="" '
 	. 'src="http://chart.apis.google.com/chart?'
 	// title
@@ -67,7 +68,7 @@ function display_archive_chart( $atts ) {
 	// select axises
 	. 'chxt=x,y&amp;'
 	// scaling
-	. 'chs='.$width.'x107&amp;'
+	. 'chs='.$width.'x'.$height.'&amp;'
 	// chart type
 	. 'cht=lc&amp;'
 	. 'chco=3D7930&amp;'
