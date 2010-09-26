@@ -10,6 +10,10 @@ Min WP Version: 1.5
  */
 
 function display_archive_chart( $atts ) {
+
+	// this function contains modified code from wp-includes/general-template.php
+	// to get some archive options to arrays
+
 	global $wpdb, $wp_locale;
 
 	extract(shortcode_atts(array(
@@ -17,6 +21,9 @@ function display_archive_chart( $atts ) {
 		'width' => '600',
 		'count' => '12',
 	), $atts));
+
+	$where = apply_filters('getarchives_where', "WHERE post_type = 'post' AND post_status = 'publish'", $r );
+	$join = apply_filters('getarchives_join', "", $r);
 
 	$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date DESC $limit";
 	$key = md5($query);
@@ -34,19 +41,16 @@ function display_archive_chart( $atts ) {
 		$archivecounts[] = $arcresult->posts;
 	};
 
-
+	// cut the "last" n entries, default above is 12
+	$archivemonths = array_slice( $archivemonths, 0, esc_attr( $count ) );
+	$archivecounts = array_slice( $archivecounts, 0, esc_attr( $count ) );
 
 	// reverse the arrays
 	$archivemonths = array_reverse( $archivemonths );
 	$archivecounts = array_reverse( $archivecounts );
 
-	// cut the "last" n entries, default above is 12
-	$archivemonths = array_slice( $archivemonths, esc_attr( $count ) );
-	$archivecounts = array_slice( $archivecounts, esc_attr( $count ) );
-
 	//find max val
 	$archivemax = max( $archivecounts );
-
 	
 	$chart_code =  '<img '.
 	'width="' . esc_attr( $width ) . '" '
@@ -58,7 +62,7 @@ function display_archive_chart( $atts ) {
 	// fill labels of the x-axis
 	. 'chxl=0:|' . join( '|', $archivemonths )  . '&amp;'
 	//scale
-	. 'chxr=0,0,'.($archivemax).'|1,0,' . ($archivemax) . '&amp;'
+	. 'chxr=0,0,'.($archivemax).'|1,0,' . ($archivemax + 1) . '&amp;'
 #	. 'chxs=0,676767,11.5,0,lt,676767' . '&amp;'
 	// select axises
 	. 'chxt=x,y&amp;'
