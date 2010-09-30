@@ -21,6 +21,7 @@ function display_archive_chart( $atts ) {
 		'width' => '600',
 		'height' => '120',
 		'count' => '12',
+		'color' => '3D7930',
 	), $atts));
 
 	$where = apply_filters('getarchives_where', "WHERE post_type = 'post' AND post_status = 'publish'", $r );
@@ -71,7 +72,7 @@ function display_archive_chart( $atts ) {
 	. 'chs='.$width.'x'.$height.'&amp;'
 	// chart type
 	. 'cht=lc&amp;'
-	. 'chco=3D7930&amp;'
+	. 'chco='.$color.'&amp;'
 	// fill data of numbers
 	. 'chd=t:' . join( ',', $archivecounts ) . '&amp;'
 	// scale
