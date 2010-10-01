@@ -82,14 +82,15 @@ function display_archive_chart( $atts ) {
 	// C5D4B5 --> COLOR
 	// BB --> TRANSPARENCY
 	// 0,0,0 --> PRIORITY
-	. 'chm=B,' . esc_attr( $fillcolor) . esc_attr( $filltrans ) . ',0,0,0">';
+	. 'chm=B,' . esc_attr( $fillcolor) . esc_attr( $filltrans ) . ',0,0,0">'
 	// fill data of numbers
 	. 'chd=t:' . join( ',', $archivecounts ) . '&amp;'
 	// scale
 	. 'chds=0,' . $archivemax . '&amp;'
-	// funny stuff I don't know
-	. 'chg=14.3,-1,1,1&amp;'
+	// line style
 	. 'chls=2,4,0&amp;'
+	// grid size, line-style of grid
+	. 'chg=10,-1,1,1&amp;';
 
 	return $chart_code;
 }
