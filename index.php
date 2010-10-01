@@ -67,7 +67,7 @@ function display_archive_chart( $atts ) {
 	// fill labels of the x-axis
 	. 'chxl=0:|' . join( '|', $archivemonths )  . '&amp;'
 	//scale
-	. 'chxr=0,0,' . $archivemax . '|1,0,' . ( $archivemax + 1 ) . '&amp;'
+	. 'chxr=0,0,' . ( $archivemax + 1 ) . '|1,0,' . ( $archivemax + 1 ) . '&amp;'
 #	. 'chxs=0,676767,11.5,0,lt,676767' . '&amp;'
 	// select axises
 	. 'chxt=x,y&amp;'
@@ -82,15 +82,15 @@ function display_archive_chart( $atts ) {
 	// C5D4B5 --> COLOR
 	// BB --> TRANSPARENCY
 	// 0,0,0 --> PRIORITY
-	. 'chm=B,' . esc_attr( $fillcolor) . esc_attr( $filltrans ) . ',0,0,0">'
+	. 'chm=B,' . esc_attr( $fillcolor ) . esc_attr( $filltrans ) . ',0,0,0&amp;'
 	// fill data of numbers
 	. 'chd=t:' . join( ',', $archivecounts ) . '&amp;'
 	// scale
-	. 'chds=0,' . $archivemax . '&amp;'
+	. 'chds=0,' . ( $archivemax + 1 ) . '&amp;'
 	// line style
 	. 'chls=2,4,0&amp;'
 	// grid size, line-style of grid
-	. 'chg=10,-1,1,1&amp;';
+	. 'chg=10,-1,1,1">';
 
 	return $chart_code;
 }
