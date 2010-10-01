@@ -2,7 +2,7 @@
 /*
 Plugin Name: Archive Chart
 Plugin URI: http://wiki.campino2k.de/programmierung/wp-plugin-archive-chart
-Description: Displays a google api chart for Archive via Shortcode
+Description: Displays a google api chart for Archive via shortcode
 Version: 0.9.2 
 Author: Christian Jung
 Author URI: http://campino2k.de
@@ -24,12 +24,13 @@ function display_archive_chart( $atts ) {
 		'color' => '3D7930',
 	), $atts));
 
-	$where = apply_filters('getarchives_where', "WHERE post_type = 'post' AND post_status = 'publish'", $r );
-	$join = apply_filters('getarchives_join', "", $r);
+	$where = apply_filters( 'getarchives_where', "WHERE post_type = 'post' AND post_status = 'publish'", $r );
+	$join  = apply_filters( 'getarchives_join', "", $r );
 
 	$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date DESC $limit";
-	$key = md5($query);
+	$key   = md5($query);
 	$cache = wp_cache_get( 'wp_get_archives' , 'general');
+
 	if ( !isset( $cache[ $key ] ) ) {
 		$arcresults = $wpdb->get_results($query);
 		$cache[ $key ] = $arcresults;
@@ -56,7 +57,7 @@ function display_archive_chart( $atts ) {
 	
 	$chart_code =  '<img '.
 	'width="' . esc_attr( $width ) . '" '
-	. 'height="'.$height.'" '
+	. 'height="' . esc_attr($height) . '" '
 	. 'alt="" '
 	. 'src="http://chart.apis.google.com/chart?'
 	// title
@@ -64,19 +65,20 @@ function display_archive_chart( $atts ) {
 	// fill labels of the x-axis
 	. 'chxl=0:|' . join( '|', $archivemonths )  . '&amp;'
 	//scale
-	. 'chxr=0,0,'.($archivemax).'|1,0,' . ($archivemax + 1) . '&amp;'
+	. 'chxr=0,0,' . $archivemax . '|1,0,' . ( $archivemax + 1 ) . '&amp;'
 #	. 'chxs=0,676767,11.5,0,lt,676767' . '&amp;'
 	// select axises
 	. 'chxt=x,y&amp;'
 	// scaling
-	. 'chs='.$width.'x'.$height.'&amp;'
+	. 'chs=' . esc_attr( $width ) . 'x' . esc_attr( $height ) .'&amp;'
 	// chart type
 	. 'cht=lc&amp;'
-	. 'chco='.$color.'&amp;'
+	// chart color
+	. 'chco=' . esc_attr( $color ) . '&amp;'
 	// fill data of numbers
 	. 'chd=t:' . join( ',', $archivecounts ) . '&amp;'
 	// scale
-	. 'chds=0,' . ($archivemax) . '&amp;'
+	. 'chds=0,' . $archivemax . '&amp;'
 	// funny stuff I don't know
 	. 'chg=14.3,-1,1,1&amp;'
 	. 'chls=2,4,0&amp;'
@@ -85,6 +87,6 @@ function display_archive_chart( $atts ) {
 	return $chart_code;
 }
 
-add_shortcode('archive_chart', 'display_archive_chart');
+add_shortcode( 'archive_chart', 'display_archive_chart' );
 
 ?>
