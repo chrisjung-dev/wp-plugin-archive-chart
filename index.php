@@ -21,7 +21,9 @@ function display_archive_chart( $atts ) {
 		'width' => '600',
 		'height' => '120',
 		'count' => '12',
-		'color' => '3D7930',
+		'linecolor' => '3D7930',
+		'fillcolor' => 'C5D4B5',
+		'filltrans' => 'BB',
 	), $atts));
 
 	$where = apply_filters( 'getarchives_where', "WHERE post_type = 'post' AND post_status = 'publish'", $r );
@@ -73,8 +75,14 @@ function display_archive_chart( $atts ) {
 	. 'chs=' . esc_attr( $width ) . 'x' . esc_attr( $height ) .'&amp;'
 	// chart type
 	. 'cht=lc&amp;'
-	// chart color
-	. 'chco=' . esc_attr( $color ) . '&amp;'
+	// chart color (line)
+	. 'chco=' . esc_attr( $linecolor ) . '&amp;'
+	// fill color marker
+	// B, --> FILL path
+	// C5D4B5 --> COLOR
+	// BB --> TRANSPARENCY
+	// 0,0,0 --> PRIORITY
+	. 'chm=B,' . esc_attr( $fillcolor) . esc_attr( $filltrans ) . ',0,0,0">';
 	// fill data of numbers
 	. 'chd=t:' . join( ',', $archivecounts ) . '&amp;'
 	// scale
@@ -82,7 +90,6 @@ function display_archive_chart( $atts ) {
 	// funny stuff I don't know
 	. 'chg=14.3,-1,1,1&amp;'
 	. 'chls=2,4,0&amp;'
-	. 'chm=B,C5D4B5BB,0,0,0">';
 
 	return $chart_code;
 }
