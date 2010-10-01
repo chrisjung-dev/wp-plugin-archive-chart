@@ -90,7 +90,8 @@ function display_archive_chart( $atts ) {
 	// line style
 	. 'chls=2,4,0&amp;'
 	// grid size, line-style of grid
-	. 'chg=10,-1,1,1">';
+	// (-1) -> automatic, which means: for every data point 1 vertical
+	. 'chg=-1,-1,1,1">';
 
 	return $chart_code;
 }
