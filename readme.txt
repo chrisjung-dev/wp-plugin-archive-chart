@@ -1,7 +1,7 @@
 === Wordpress Archive Chart ===
 Author: Chris Jung
 Author URI: http://campino2k.de
-Plugin URI: http://wiki.campino2k.de/programmierung/wp-plugin-archive-chart
+Plugin URI: http://wiki.campino2k.de/donate
 Donate link: http://flattr.com/thing/66415/WordPress-Archive-Chart-Plugin
 Tags: archive, chart
 Requires at least: 3.0
