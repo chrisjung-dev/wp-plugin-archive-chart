@@ -3,7 +3,7 @@
 Plugin Name: Archive Chart
 Plugin URI: http://wiki.campino2k.de/programmierung/wp-plugin-archive-chart
 Description: Displays a google api chart for Archive via shortcode
-Version: 0.9.2 
+Version: 0.9.3
 Author: Christian Jung
 Author URI: http://campino2k.de
 Min WP Version: 3.0
