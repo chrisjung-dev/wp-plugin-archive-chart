@@ -5,7 +5,7 @@ Plugin URI: http://wiki.campino2k.de/programmierung/wp-plugin-archive-chart
 Author: Christian Jung
 Author URI: http://campino2k.de
 Description: Displays a google api chart for Archive via shortcode
-Version: 0.9.3
+Version: 0.9.4
 Min WP Version: 3.0
  */
 
@@ -24,7 +24,9 @@ function display_archive_chart( $atts ) {
 		'linecolor' => '3D7930',
 		'fillcolor' => 'C5D4B5',
 		'filltrans' => 'BB',
-	), $atts));
+		'bgcolor' => 'FFFFFF',
+		'bgtrans' => '',
+), $atts));
 
 	$where = apply_filters( 'getarchives_where', "WHERE post_type = 'post' AND post_status = 'publish'", $r );
 	$join  = apply_filters( 'getarchives_join', "", $r );
@@ -78,11 +80,13 @@ function display_archive_chart( $atts ) {
 	// chart color (line)
 	. 'chco=' . esc_attr( $linecolor ) . '&amp;'
 	// fill color marker
-	// B, --> FILL path
-	// C5D4B5 --> COLOR
-	// BB --> TRANSPARENCY
-	// 0,0,0 --> PRIORITY
+		// B, --> FILL path
+		// C5D4B5 --> COLOR
+		// BB --> TRANSPARENCY
+		// 0,0,0 --> PRIORITY
 	. 'chm=B,' . esc_attr( $fillcolor ) . esc_attr( $filltrans ) . ',0,0,0&amp;'
+	// background-color and transparency of the image
+	. 'chf=bg,s,' . esc_attr( $bgcolor ) . esc_attr( $bgtrans ) . '&amp;'
 	// fill data of numbers
 	. 'chd=t:' . join( ',', $archivecounts ) . '&amp;'
 	// scale
