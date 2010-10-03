@@ -28,6 +28,9 @@ Insert shortcode in post: [archive_chart]
 1. Display in the blog
 
 == Changelog ==
+= 0.9.4 =
+* Background of the created Image is configurable in color and transparency
+
 = 0.9.3 =
 * Corrected Donate and Plugin URL
 
