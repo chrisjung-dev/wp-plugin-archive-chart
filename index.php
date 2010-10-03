@@ -2,10 +2,10 @@
 /*
 Plugin Name: Archive Chart
 Plugin URI: http://wiki.campino2k.de/programmierung/wp-plugin-archive-chart
-Description: Displays a google api chart for Archive via shortcode
-Version: 0.9.3
 Author: Christian Jung
 Author URI: http://campino2k.de
+Description: Displays a google api chart for Archive via shortcode
+Version: 0.9.3
 Min WP Version: 3.0
  */
 
