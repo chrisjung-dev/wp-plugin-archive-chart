@@ -93,20 +93,27 @@ class wp_archive_chart {
 				$post_filter
 			);
 
-			echo $year . '-' . $month . ':' . count( $posts ) . ', <br>';
+			$post_num = count( $posts );
 
-			$month -= 1;// $month--;
-			if( $month < 0 ) {
+			$this->save_data( $year, $month, $post_num );
+
+			if( $month == 1 ) {
 				$month = 12;
 				$year--;
+			} else {
+				$month--;
 			}
-
 		}
 
 	}
 
 	public function draw_archive_chart( $atts, $content, $code ) {
 
+	}
+
+	public function save_data( $year, $month, $count ){
+		$this->data[] = array( $year, $month, $count );
+		echo  $year .'-'. $month. ':'. $count.'<br>'; 
 	}
 
 	/***
