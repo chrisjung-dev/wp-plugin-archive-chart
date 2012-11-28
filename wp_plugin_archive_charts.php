@@ -46,13 +46,15 @@ class wp_archive_chart {
 			'filltrans' => 'BB',
 			'bgcolor' => 'FFFFFF',
 			'bgtrans' => '',
-			'category' => '',
-			'author' => '',
-			'post_format' => '',
+			'category' => null,
+			'author' => null,
+			'post_format' => null,
 		), $atts);
 
 		
 		$this->get_archive_numbers( $atts, $content, $code );
+
+		$this->draw_archive_chart( $atts, $content, $code );
 	}
 
 	/***
@@ -60,7 +62,7 @@ class wp_archive_chart {
 	 *
 	 * http://plugins.trac.wordpress.org/browser/posts-per-month/trunk/magic.php
 	 *
-	 */
+	 ***/
 	public function get_archive_numbers( $atts, $content, $code ) {
 
 		$latest_post_date = $this->get_latest_post_date();
@@ -70,21 +72,37 @@ class wp_archive_chart {
 
 		$count = is_numeric( $atts[ 'count' ]  ) ? $atts[ 'count' ] : 12;
 		
+		// reset the filter
+		unset( $post_filter );
+
+		$post_filter = array(
+			'nopaging' => true,
+			'post_status' => 'publish',
+			'suppress_filters' => false,
+		);
+
+		/***
+		 * Filter by category
+		 *
+		 * If category is set, check if it's numeric
+		 * get_posts only accepts category ids, but to get some
+		 * really convenient usage, translate slug into id.
+		 ***/
+
+		$filter_category = $atts[ 'category' ]; 
+		if( $filter_category ) {
+
+			if( ! is_numeric( $filter_category ) )
+			{
+				$filter_category_value = get_category_by_slug( $filter_category )->term_id;
+			} else {
+				$filter_category_value = $filter_category;
+			}
+			$post_filter[ 'category' ] = $filter_category_value;
+		}
 
 		for( $i = $count; $i>0; $i-- ){
 
-			// reset the filter
-			unset( $post_filter );
-
-			$post_filter = array(
-				'nopaging' => true,
-				'post_status' => 'publish',
-				'suppress_filters' => false,
-			);
-
-			if( $atts[ 'category' ] ) {
-				$post_filter[ 'category' ] = $atts[ 'category' ];
-			}
 
 			$post_filter[ 'year' ] = $year;
 			$post_filter[ 'monthnum' ] = $month;
@@ -113,12 +131,12 @@ class wp_archive_chart {
 
 	public function save_data( $year, $month, $count ){
 		$this->data[] = array( $year, $month, $count );
-		echo  $year .'-'. $month. ':'. $count.'<br>'; 
+		//echo  $year .'-'. $month. ':'. $count.'<br>'; 
 	}
 
 	/***
 	 * Return the date of the newest post
-	 */
+	 ***/
 	public function get_latest_post_date() {
 		$posts = get_posts( array(
 			'post_status' => 'publish',
