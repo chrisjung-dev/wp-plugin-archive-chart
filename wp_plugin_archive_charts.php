@@ -12,12 +12,11 @@ Min WP Version: 3.0
 /**
 * create instance of archive chart  at init action
 * needs to be be before print_styles since we add some own styles
-* /
+*/
 add_action( 'init', function() {
 // create anonymous instance on init
 	new wp_archive_chart();
 });
-*/
 class wp_archive_chart {
 
 	private $data;
@@ -89,7 +88,7 @@ class wp_archive_chart {
 		 * really convenient usage, translate slug into id.
 		 ***/
 
-		$filter_category = $atts[ 'category' ]; 
+		$filter_category = esc_attr( $atts[ 'category' ] ); 
 		if( $filter_category ) {
 
 			if( ! is_numeric( $filter_category ) )
@@ -100,6 +99,24 @@ class wp_archive_chart {
 			}
 			$post_filter[ 'category' ] = $filter_category_value;
 		}
+
+		/***
+		 * Filter authors
+		 *
+		 ***/
+		$filter_author = esc_attr( $atts[ 'author' ] );
+		if( $filter_author ) {
+			$post_filter[ 'author' ] = $filter_author;
+		}
+
+
+
+
+		/***
+		 * After applying all filters, query the DB
+		 *
+		 ***/
+
 
 		for( $i = $count; $i>0; $i-- ){
 
@@ -122,16 +139,63 @@ class wp_archive_chart {
 				$month--;
 			}
 		}
-
 	}
 
 	public function draw_archive_chart( $atts, $content, $code ) {
 
+		$archivemonths = null;
+		$archivecounts = null; 
+		$archivemax = null;
+
+		$chart_code =  '<img '.
+		'width="' . esc_attr( $atts[ 'width' ] ) . '" '
+		. 'height="' . esc_attr($atts[ 'height' ] ) . '" '
+		. 'alt="" '
+		. 'src="http://chart.apis.google.com/chart?'
+		// title
+		. 'chtt=' . esc_attr( $atts[ 'name'] ) . '&amp;'
+		// fill labels of the x-axis
+		. 'chxl=0:|' . join( '|', $archivemonths )  . '&amp;'
+		//scale
+		. 'chxr=0,0,' . ( $archivemax + 1 ) . '|1,0,' . ( $archivemax + 1 ) . '&amp;'
+	#	. 'chxs=0,676767,11.5,0,lt,676767' . '&amp;'
+		// select axises
+		. 'chxt=x,y&amp;'
+		// scaling
+		. 'chs=' . esc_attr( $atts[ 'width' ] ) . 'x' . esc_attr( $atts[ 'height' ] ) .'&amp;'
+		// chart type
+		. 'cht=lc&amp;'
+		// chart color (line)
+		. 'chco=' . esc_attr( $atts[ 'linecolor' ] ) . '&amp;'
+		// fill color marker
+			// B, --> FILL path
+			// C5D4B5 --> COLOR
+			// BB --> TRANSPARENCY
+			// 0,0,0 --> PRIORITY
+		. 'chm=B,' . esc_attr( $atts[ 'fillcolor' ] ) . esc_attr( $atts[ 'filltrans' ] ) . ',0,0,0&amp;'
+		// background-color and transparency of the image
+		. 'chf=bg,s,' . esc_attr( $atts[ 'bgcolor' ] ) . esc_attr( $atts[ 'bgtrans' ] ) . '&amp;'
+		// fill data of numbers
+		. 'chd=t:' . join( ',', $archivecounts ) . '&amp;'
+		// scale
+		. 'chds=0,' . ( $archivemax + 1 ) . '&amp;'
+		// line style
+		. 'chls=2,4,0&amp;'
+		// grid size, line-style of grid
+		// (-1) -> automatic, which means: for every data point 1 vertical
+		. 'chg=-1,-1,1,1">';
+
+		return $chart_code;
+	}
+
+	public function transform_data(){
+
+
+//		return 
 	}
 
 	public function save_data( $year, $month, $count ){
 		$this->data[] = array( $year, $month, $count );
-		//echo  $year .'-'. $month. ':'. $count.'<br>'; 
 	}
 
 	/***
@@ -163,4 +227,3 @@ class wp_archive_chart {
 		return $links;
 	}
 };
-$wp_archive_chart = new wp_archive_chart();
